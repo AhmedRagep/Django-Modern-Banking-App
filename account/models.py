@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 from shortuuid.django_fields import ShortUUIDField
 from userauths.models import User
+from django.db.models.signals import post_save
 # Create your models here.
 
 
@@ -67,3 +68,58 @@ class Account(models.Model):
         return f"{self.user}"
       except:
         return 'Account Model'
+      
+
+
+# لجلب هوية العملاء
+class KYC(models.Model):
+  id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
+  user = models.OneToOneField(User, on_delete=models.CASCADE)
+  account = models.OneToOneField(Account, on_delete=models.CASCADE,blank=True, null=True)
+  full_name = models.CharField(max_length=1000)
+  image = models.ImageField(upload_to='kyc',default='default.jpg')
+  marrital_status = models.CharField(choices=MARITAL_STATUS,max_length=40)
+  gender = models.CharField(choices=GENDER,max_length=40)
+  identity_type = models.CharField(choices=IDENTITY_TYPE,max_length=140)
+  identity_image = models.ImageField(upload_to='kys', null=True,blank=True)
+  date_of_birth = models.DateTimeField(auto_now_add=False)
+  signature = models.ImageField(upload_to='kyc')
+
+  # Address 
+  country = models.CharField(max_length=100)
+  state = models.CharField(max_length=100)
+  city = models.CharField(max_length=100)
+
+  # Contact Detail
+  mobile = models.CharField(max_length=1000)
+  fax = models.CharField(max_length=1000)
+  date = models.DateTimeField(auto_now_add=True)
+
+
+  def __str__(self):
+      return f"{self.user}"
+
+
+    
+
+# تعريف الدالة الأولى التي ستنفذ عند إنشاء User جديد
+def create_account(sender, instance, created, **kwargs):
+  # تحقق إذا كان المستخدم منشأ حديثا    
+  if created:
+    # بنفس اسم اليوزر Account إنشاء كائن  
+    Account.objects.create(user=instance)
+
+# تعريف الدالة الثانية التي ستنفذ عند حفظ User  
+def save_account(sender, instance, **kwargs):
+  # حفظ كائن Account المرتبط بالمستخدم
+  instance.account.save()
+
+# ربط الدالة الأولى بإشارة post_save لـ User
+post_save.connect(create_account,sender=User)
+# ربط الدالة الثانية بإشارة post_save لـ User  
+post_save.connect(save_account,sender=User)
+
+
+
+
+

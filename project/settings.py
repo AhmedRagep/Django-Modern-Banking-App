@@ -139,6 +139,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'userauths.User'
 
+LOGIN_URL = 'sign-in'
+LOGOUT_REDIRECT_URL = 'sign-in'
+
 JAZZMIN_SETTINGS = {
     # "site_title": "MovieX",
     "site_header": "Paylio",

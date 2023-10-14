@@ -20,7 +20,7 @@ def RegisterView(request):
 
       # تسجيل الدخول
       login(request, new_user)
-      return redirect('index')
+      return redirect('account')
     
   # اذا كان اليوزر مسجل يتم اعادة توجيه الي الصفحة الرئيسيه
   if request.user.is_authenticated:
@@ -49,12 +49,17 @@ def SignInView(request):
         # سجل دخول بيه
         login(request, user)
         messages.success(request, 'You are logged In.')
-        return redirect('index')
+        return redirect('account')
       else:
         messages.warning(request, 'Username or Password does not exist!')
         return redirect('sign-in')
     except:
       messages.warning(request, 'User does not exist!')
+
+  if request.user.is_authenticated:
+    messages.warning(request, 'You are already logged in>')
+    return redirect('account')
+  
   return render(request, 'userauths/sign-in.html')
 
 
@@ -62,5 +67,5 @@ def SignInView(request):
 
 def LogoutView(request):
   logout(request)
-  messages.error(request, 'Logged Out!...')
+  messages.warning(request, 'Logged Out!...')
   return redirect('sign-in')

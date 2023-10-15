@@ -1,7 +1,7 @@
 {% extends 'dashboard-base.html' %}
 {% load static %}
 {% block title %}
-  Account
+  Search Account
 {% endblock title %}
 {% block content %}
     <!-- Dashboard Section start -->
@@ -21,7 +21,7 @@
                         <div class="form-group d-flex align-items-center">
                             <img src="{% static 'assets1/images/icon/search.png' %}" alt="icon">
                             <input type="text" name="account_number" placeholder="Enter account number or ID">
-                            <button type="submit"><i class="fas fa-angle-right"></i></button>
+                            <button type="submit"><strong></strong><i class="fa fa-arrow-right" aria-hidden="true"></i></strong></button>
                           </div>
                     </form>
                     <div class="user-select">
@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                             <div class="right">
-                                <a href="">Choose</a>
+                                <a href="{% url 'amount-transfer' a.account_number %}">Choose</a>
                             </div>
                         </div>
                         {% empty %}
@@ -49,10 +49,10 @@
                       {% endfor %}
                       {% endif %}
                     </div>
-                    <div class="footer-area mt-40">
-                        <a href="pay.html">Previous Step</a>
-                        <a href="pay-step-2.html" class="active">Next</a>
-                    </div>
+                      <div class="footer-area mt-40">
+                          <a href="pay.html">Previous Step</a>
+                          <a href="" class="active">Next</a>
+                      </div>
                 </div>
             </div>
         </div>

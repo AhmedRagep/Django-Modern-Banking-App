@@ -7,5 +7,6 @@ urlpatterns = [
 
     path('search-account', Transfer.search_account_number, name='search-account'),
     path('amount-transfer/<account_number>', Transfer.amount_transfer, name='amount-transfer'),
+    path('amount-transfer-process/<account_number>', Transfer.amount_transfer_Process, name='amount-transfer-process'),
     
 ]

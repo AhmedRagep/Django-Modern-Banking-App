@@ -79,3 +79,72 @@ def amount_transfer_Process(request,account_number ):
   else:
     messages.warning(request, "Error Occured, Try again later.")
     return redirect("account")
+
+
+
+def transfer_confirmation(request, account_number, transaction_id):
+  try:
+    account = Account.objects.get(account_number=account_number)
+    transaction = Transaction.objects.get(transaction_id=transaction_id)
+
+  except:
+    messages.warning(request, "Transaction does not exist.")
+    return redirect("account")
+
+  context = {
+    'account':account,
+    'transaction':transaction,
+  }
+
+  return render(request, 'transfer/transfer-confirmation.html',context)
+
+
+
+def transfer_process(request, account_number, transaction_id):
+  account = Account.objects.get(account_number=account_number)
+  transaction = Transaction.objects.get(transaction_id=transaction_id)
+
+  # الشخص اللذي سيرسل الاموال هوا اليوزر
+  sender = request.user
+  # الشخص اللذي سوف يستلم الاموال هو اليوزر صاحب الاكونت السابق
+  reciever = account.user
+
+  # جلب اكونت اليوزر الحالي
+  sender_account = request.user.account
+  # جلب اكونت المستلم
+  reciever_account = account
+
+  completed = False
+  if request.method == 'POST':
+    # جلب الرقم من العرض
+    pin_number = request.POST.get('pin-number')
+    print(pin_number)
+
+    # لو الرقم هوا الرقم الحقيقي للشخص المرسل
+    if pin_number == sender_account.pin_number:
+      # اجعل المعامله مؤكده
+      transaction.status = "completed"
+      # ثم احفظ
+      transaction.save()
+
+      # جلب رصيد المرسل وخصم الرصيد اللذي سيرسله من رصيده
+      sender_account.account_balance -= transaction.amount
+      # ثم حفظ
+      sender_account.save()
+
+      # جلب رصيد المستلم واضافة الرصيد المضاف لحسابه
+      account.account_balance += transaction.amount
+      # وحفظ
+      account.save()
+
+      messages.success(request, "Transfer Successfully.")
+      return redirect('account')
+    
+    else:
+      messages.warning(request, "Incorrect PIN.")
+      return redirect('transfer-confirmation', account.account_number, transaction.transaction_id)
+    
+  else:
+    messages.warning(request, "An error occured, Try again later.")
+    return redirect('account')
+    

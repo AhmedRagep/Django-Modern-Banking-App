@@ -10,5 +10,6 @@ urlpatterns = [
     path('amount-transfer-process/<account_number>', Transfer.amount_transfer_Process, name='amount-transfer-process'),
     path('transfer-confirmation/<account_number>/<transaction_id>', Transfer.transfer_confirmation, name='transfer-confirmation'),
     path('transfer-process/<account_number>/<transaction_id>', Transfer.transfer_process, name='transfer-process'),
+    path('transfer-completed/<account_number>/<transaction_id>', Transfer.transfer_completed, name='transfer-completed'),
     
 ]

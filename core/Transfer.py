@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib import messages
 from .models import Transaction
+from decimal import Decimal
 
 @login_required
 def search_account_number(request):
@@ -53,7 +54,7 @@ def amount_transfer_Process(request,account_number ):
     description = request.POST.get("description")
 
     # لو رصيد اليوزر الحالي اكبر من 0 او هوا كتب رصيد في العرض
-    if sender_account.account_balance > 0 and amount:
+    if sender_account.account_balance >= Decimal(amount):
       # اعمل معاملة جديد بالمعلومات السابقه
       new_transaction = Transaction.objects.create(
         user = request.user,
@@ -100,6 +101,7 @@ def transfer_confirmation(request, account_number, transaction_id):
 
 
 
+
 def transfer_process(request, account_number, transaction_id):
   account = Account.objects.get(account_number=account_number)
   transaction = Transaction.objects.get(transaction_id=transaction_id)
@@ -138,7 +140,7 @@ def transfer_process(request, account_number, transaction_id):
       account.save()
 
       messages.success(request, "Transfer Successfully.")
-      return redirect('account')
+      return redirect('transfer-completed', account.account_number, transaction.transaction_id)
     
     else:
       messages.warning(request, "Incorrect PIN.")
@@ -148,3 +150,21 @@ def transfer_process(request, account_number, transaction_id):
     messages.warning(request, "An error occured, Try again later.")
     return redirect('account')
     
+
+
+
+def transfer_completed(request, account_number, transaction_id):
+  try:
+    account = Account.objects.get(account_number=account_number)
+    transaction = Transaction.objects.get(transaction_id=transaction_id)
+
+  except:
+    messages.warning(request, "Transfer does not exist.")
+    return redirect("account")
+
+  context = {
+    'account':account,
+    'transaction':transaction,
+  }
+
+  return render(request, 'transfer/transfer-completed.html',context)

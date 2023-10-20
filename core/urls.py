@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views , Transfer
+from .transaction import transaction_lists
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -12,4 +13,8 @@ urlpatterns = [
     path('transfer-process/<account_number>/<transaction_id>', Transfer.transfer_process, name='transfer-process'),
     path('transfer-completed/<account_number>/<transaction_id>', Transfer.transfer_completed, name='transfer-completed'),
     
+
+    # transaction
+
+    path('transactions', transaction_lists, name='transactions')
 ]

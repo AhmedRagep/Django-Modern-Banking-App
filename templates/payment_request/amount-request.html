@@ -1,0 +1,121 @@
+{% extends 'dashboard-base.html' %}
+{% load static %}
+لجلب فلاتر الارقام
+{% load humanize %}
+{% block title %}
+  Amount Transfer
+{% endblock title %}
+{% block content %}
+    <!-- Dashboard Section start -->
+    <section class="dashboard-section body-collapse pay step step-2">
+        <div class="overlay pt-120">
+            <div class="container-fruid">
+                <div class="main-content">
+                    <div class="head-area d-flex align-items-center justify-content-between">
+                        <h4>Request Payment</h4>
+                        <div class="icon-area">
+                            <img src="{% static 'assets1/images/icon/support-icon.png' %}" alt="icon">
+                        </div>
+                    </div>
+                    <div class="choose-recipient">
+                        <div class="step-area">
+                            <span class="mdr">Step 2 of 3</span>
+                            <h5>Set Amount of request</h5>
+                        </div>
+                        <div class="user-select">
+                            <div class="single-user">
+                                <div class="left d-flex align-items-center">
+                                  <div class="img-area">
+                                    <img style="width: 70px;height: 70px;border-radius: 35%;object-fit: cover;border: solid gray 2px;" src="{{account.user.kyc.image.url}}" alt="image">
+                                  </div>
+                                  <div class="text-area">
+                                      <p>{{account.user.kyc.full_name|title}}</p>
+                                      <span class="mdr"><b>{{account.account_number}}</b></span> <br>
+                                      <span class="mdr">{{account.user.email}}</span>
+                                  </div>
+                                </div>
+                                <div class="right">
+                                    <a href="{% url 'search-account' %}">
+                                        <i class="icon-h-edit"></i>
+                                        Edit
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--                   ارسال المعلومات الي هذا الرابط برقم الحساب    -->
+                    <form action="{% url 'amount-transfer-process' account.account_number %}" method="POST">
+                      {% csrf_token %}
+                        <div class="send-banance">
+                            <span class="mdr">You Request</span>
+                            <div class="input-area">
+                              <!--             send-amount لتحديث الرصيد والمعلومات اذا تم تغيير  -->
+                                <input class="xxlr" placeholder="Enter Amount Request " type="number" name="amount-send" id="amount-request">
+                                <select>
+                                    <option value="1">USD</option>
+                                    <option value="2">USD</option>
+                                    <option value="3">USD</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="send-banance pt-0 mt-0">
+                            <span class="mdr">Request Description</span>
+                            <div class="input-area">
+                              <!--             send-amount لتحديث الرصيد والمعلومات اذا تم تغيير  -->
+                                <input class="xxlr" placeholder="Request money for house rent" type="text" name="description">
+                                
+                            </div>
+                        </div>
+                        <!-- js code -->
+                        <!-- <script>
+                          // هذه الدالة موجوده في مدخل الرصيد
+                          function CalculateBalance(){
+                            // متغير به الرصيد المتاح
+                            let available_balance = "{{ request.user.account.account_balance }}"
+                            // جلب اي دي الرصيد الجديد
+                            let new_balance = document.getElementById("new_balance")
+                            // جلب الرصيد اللذي تمت كتابته وسيؤخذ من الرصيد الكلي
+                            let sendAmount_input = document.getElementById("amount-send")
+                            // جلب قيمة الرقم اللذي تمت كتابته
+                            let sendAmount = sendAmount_input.value
+                            // جلب دالة الاخطاء
+                            let errorDiv = document.getElementById("error-div")
+                            // جلب دالة الرصيد الكلي
+                            let total_to_pay = document.getElementById("total_to_pay")
+
+                            let errors = []
+
+                            // عملية حسابية لطرح القيمة اللتي تمت كتابتها من الرصيد الكلي
+                            calc = available_balance - sendAmount
+                            console.log(calc);
+
+                            // لعرض الرصيد بعد الطرح في صفحة العرض منسق بعمل فاصل بين كل الف
+                            new_balance.innerHTML = `New Balance <b> $${calc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} </b>`
+                            // لعرض الرصيد اللذي ستقوم بدفعه
+                            total_to_pay.innerHTML = `USD <b> $${sendAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} </b>`
+
+                            // لو الرصيد اللي كتبته اقل من 0
+                            if(calc < 0){
+                              // غير لونه في العرض للاحمر
+                              new_balance.style.color = "red"
+                              // وطلع رسالة للمستخدم تقوله ان الرصيد المتاح هوا الرصيد الكلي بس
+                              alert("You can only send $" + available_balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+                            } else {
+                              // لو الرصيد اللي كتبته جيد اجعل لونه اسود
+                              new_balance.style.color = "#27276e"
+                            }
+
+                          }
+                        </script> -->
+                        
+                        <div class="footer-area mt-40">
+                            <a href="{% url 'request-search-account' %}">Previous Step</a>
+                            <button type="submit" style="padding: 10px 30px; border-radius: 20px; background-color: rgb(98, 0, 255); color: white;" class="active">Next</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Dashboard Section end -->
+{% endblock %}

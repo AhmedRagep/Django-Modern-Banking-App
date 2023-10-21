@@ -44,13 +44,13 @@
                         </div>
                     </div>
                     <!--                   ارسال المعلومات الي هذا الرابط برقم الحساب    -->
-                    <form action="{% url 'amount-transfer-process' account.account_number %}" method="POST">
+                    <form action="{% url 'amount-request-process' account.account_number %}" method="POST">
                       {% csrf_token %}
                         <div class="send-banance">
                             <span class="mdr">You Request</span>
                             <div class="input-area">
                               <!--             send-amount لتحديث الرصيد والمعلومات اذا تم تغيير  -->
-                                <input class="xxlr" placeholder="Enter Amount Request " type="number" name="amount-send" id="amount-request">
+                                <input class="xxlr" placeholder="Enter Amount Request " type="number" name="amount-request" id="amount-request">
                                 <select>
                                     <option value="1">USD</option>
                                     <option value="2">USD</option>

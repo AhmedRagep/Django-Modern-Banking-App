@@ -20,6 +20,7 @@ TRANSACTION_STATUS = (
   ('completed', 'Completed'),
   ('pending', 'Pending'),
   ('processing', 'Processing'),
+  ('requests', 'Requests'),
   
 )
 

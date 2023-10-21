@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views , Transfer
-from .transaction import transaction_lists
+from .transaction import transaction_lists,transaction_detail
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -16,5 +16,6 @@ urlpatterns = [
 
     # transaction
 
-    path('transactions', transaction_lists, name='transactions')
+    path('transactions', transaction_lists, name='transactions'),
+    path('transactions/<transaction_id>', transaction_detail, name='transaction-detail'),
 ]

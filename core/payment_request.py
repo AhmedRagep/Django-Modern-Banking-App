@@ -31,14 +31,14 @@ def search_user_request(request):
   return render(request, 'payment_request/search-users.html', context)
 
 
-
+@login_required
 def amount_request(request, account_number):
   account = Account.objects.get(account_number=account_number)
 
   return render(request, 'payment_request/amount-request.html', {'account':account})
 
 
-
+@login_required
 def amount_request_process(request,account_number):
   account = Account.objects.get(account_number=account_number)
 
@@ -77,9 +77,40 @@ def amount_request_process(request,account_number):
   
 
 
-
+@login_required
 def amount_request_confirmation(request, account_number, transaction_id):
   account = Account.objects.get(account_number=account_number)
   transaction = Transaction.objects.get(transaction_id=transaction_id)
 
   return render(request, 'payment_request/amount-request-confirmation.html', {'account':account,'transaction':transaction})
+
+
+@login_required
+def amount_request_final(request, account_number, transaction_id):
+  account = Account.objects.get(account_number=account_number)
+  transaction = Transaction.objects.get(transaction_id=transaction_id)
+
+  if request.method == 'POST':
+    pin_number = request.POST.get("pin-number")
+    if pin_number == request.user.account.pin_number:
+      transaction.status = "completed"
+      transaction.save()
+      messages.success(request, 'Your payment request have been sent successfully.')
+      return redirect('amount-request-completed', account.account_number, transaction.transaction_id)
+    
+    else:
+      messages.warning(request, 'An Error Occurd, try again later!')
+      return redirect('dashboard')
+    
+
+@login_required
+def amount_request_completed(request, account_number, transaction_id):
+  account = Account.objects.get(account_number=account_number)
+  transaction = Transaction.objects.get(transaction_id=transaction_id)
+
+  context = {
+    'account':account,
+    'transaction':transaction,
+  }
+
+  return render(request, 'payment_request/amount-request-completed.html', context)

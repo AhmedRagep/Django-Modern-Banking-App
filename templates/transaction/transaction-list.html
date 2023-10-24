@@ -172,6 +172,9 @@
                                                       {% if s.status == 'requests' %}
                                                         <p class="inprogress">{{s.status|title}}</p>
                                                       {% endif %}
+                                                      {% if s.status == 'request_settled' %}
+                                                        <p class="text-success">{{s.status|title}}</p>
+                                                      {% endif %}
                                                       {% if s.status == 'processing' %}
                                                         <p class="inprogress">{{s.status|title}}</p>
                                                       {% endif %}
@@ -184,8 +187,17 @@
                                                         
                                                     </td>
                                                     <td>
-                                                      <a href="{% url 'transaction-detail' s.transaction_id %}" class="btn btn-primary"><i class="fas fa-eye"></i>&nbsp;View</a>
-                                                      <a href="{% url 'transaction-detail' s.transaction_id %}" class="btn btn-danger"><i class="fas fa-x"></i>&nbsp;Delete</a>
+                                                      {% if s.status == 'requests' %}
+                                                        <a href="{% url 'transaction-detail' s.transaction_id %}" class="btn btn-primary"><i class="fas fa-eye"></i>&nbsp;View</a>
+                                                        <a href="{% url 'transaction-detail' s.transaction_id %}" class="btn btn-danger"><i class="fas fa-x"></i>&nbsp;Delete</a>
+                                                      {% endif %}
+                                                      {% if s.status == 'processing' %}
+                                                        <a href="{% url 'transaction-detail' s.transaction_id %}" class="btn btn-primary"><i class="fas fa-eye"></i>&nbsp;View</a>
+                                                        <a href="{% url 'transaction-detail' s.transaction_id %}" class="btn btn-danger"><i class="fas fa-x"></i>&nbsp;Delete</a>
+                                                      {% endif %}
+                                                      {% if s.status == 'request_settled' %}
+                                                      <a href="" class="btn btn-success"><i class="fas fa-check-circle"></i>&nbsp;Settled</a>
+                                                      {% endif %}
                                                     </td>
                                                 </tr>
                                                   {% endfor %}
@@ -226,6 +238,9 @@
                                                       {% if s.status == 'requests' %}
                                                         <p class="inprogress">{{s.status|title}}</p>
                                                       {% endif %}
+                                                      {% if s.status == 'request_settled' %}
+                                                        <p class="text-success">{{s.status|title}}</p>
+                                                      {% endif %}
                                                       {% if s.status == 'processing' %}
                                                         <p class="inprogress">{{s.status|title}}</p>
                                                       {% endif %}
@@ -238,8 +253,13 @@
                                                         
                                                     </td>
                                                     <td>
-                                                      <a href="{% url 'transaction-detail' s.transaction_id %}" class="btn btn-primary"><i class="fas fa-eye"></i>&nbsp;Settle</a>
-                                                      <a href="{% url 'transaction-detail' s.transaction_id %}" class="btn btn-danger"><i class="fas fa-x"></i>&nbsp;Cancel</a>
+                                                      {% if s.status == 'requests' %}
+                                                        <a href="{% url 'settlement-confirmation' s.sender.account.account_number s.transaction_id %}" class="btn btn-primary"><i class="fas fa-eye"></i>&nbsp;Settle</a>
+                                                        <a href="{% url 'transaction-detail' s.transaction_id %}" class="btn btn-danger"><i class="fas fa-x"></i>&nbsp;Cancel</a>
+                                                      {% elif s.status == 'request_settled' %}
+                                                        <a href="" class="btn btn-success"><i class="fas fa-check-circle"></i>&nbsp;Settled</a>
+
+                                                      {% endif %}
                                                     </td>
                                                   </tr>
                                                   {% empty %}

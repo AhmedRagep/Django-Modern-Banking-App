@@ -21,6 +21,8 @@ TRANSACTION_STATUS = (
   ('pending', 'Pending'),
   ('processing', 'Processing'),
   ('requests', 'Requests'),
+  ('request_settled', 'Request settled'),
+  ('request_processing', 'Request processing'),
   
 )
 

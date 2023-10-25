@@ -63,7 +63,7 @@ def amount_request_process(request,account_number):
       reciever_account = reciever_account,
       sender_account = sender_account,
 
-      status = 'requests',
+      status = 'request_sent',
       transaction_type= 'request'
     )
 
@@ -93,7 +93,7 @@ def amount_request_final(request, account_number, transaction_id):
   if request.method == 'POST':
     pin_number = request.POST.get("pin-number")
     if pin_number == request.user.account.pin_number:
-      transaction.status = "completed"
+      transaction.status = "request_sent"
       transaction.save()
       messages.success(request, 'Your payment request have been sent successfully.')
       return redirect('amount-request-completed', account.account_number, transaction.transaction_id)
@@ -178,3 +178,27 @@ def settled_completed(request,account_number, transaction_id):
   }
 
   return render(request, 'payment_request/settled-completed.html', context)
+
+
+
+
+
+
+def delete_payment_request(request,account_number, transaction_id):
+  account = Account.objects.get(account_number=account_number)
+  transaction = Transaction.objects.get(transaction_id=transaction_id)
+
+  if request.user == transaction.user:
+    transaction.delete()
+    messages.success(request, 'Payment request deleted successfully.')
+    return redirect('transactions')
+
+  context = {
+    'account':account,
+    'transaction':transaction,
+  }
+
+  return render(request, 'payment_request/delete-payment-request.html', context)
+
+
+

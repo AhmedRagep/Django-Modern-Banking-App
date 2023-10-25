@@ -20,7 +20,7 @@ TRANSACTION_STATUS = (
   ('completed', 'Completed'),
   ('pending', 'Pending'),
   ('processing', 'Processing'),
-  ('requests', 'Requests'),
+  ('request_sent', 'Request Sent'),
   ('request_settled', 'Request settled'),
   ('request_processing', 'Request processing'),
   
@@ -42,7 +42,7 @@ class Transaction(models.Model):
   sender_account = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, related_name="sender_account")
 
   status = models.CharField(choices=TRANSACTION_STATUS, max_length=100, default="pending")
-  transaction_type = models.CharField(choices=TRANSACTION_STATUS, max_length=100, default="none")
+  transaction_type = models.CharField(choices=TRANSACTION_TYPE, max_length=100, default="none")
 
   date = models.DateTimeField(auto_now_add=True)
   updated = models.DateTimeField(auto_now_add=False, blank=True, null=True)

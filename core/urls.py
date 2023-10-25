@@ -32,4 +32,5 @@ urlpatterns = [
     path('settlement-confirmation/<account_number>/<transaction_id>',payment_request.settlement_confirmation, name='settlement-confirmation'),
     path('settlement-processing/<account_number>/<transaction_id>',payment_request.settlement_pricessing, name='settlement-processing'),
     path('settled-completed/<account_number>/<transaction_id>',payment_request.settled_completed, name='settled-completed'),
+    path('delete-payment/<account_number>/<transaction_id>',payment_request.delete_payment_request, name='delete-payment'),
 ]

@@ -9,6 +9,11 @@
     <section class="dashboard-section body-collapse">
         <div class="overlay pt-120">
             <div class="container-fruid">
+              {% if form.errors %}
+                <div class="alart alart-danger">
+                  <strong>{{form.errors</strong>
+                </div>
+              {% endif %}
                 <div class="row">
                     <div class="col-xl-8 col-lg-7">
                         <div class="section-content">
@@ -599,35 +604,49 @@
                                     <h6>Add Card</h6>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
                                 </div>
-                                <form action="#">
+                                <form method="POST">
+                                  {% csrf_token %}
                                     <div class="row justify-content-center">
-                                        <div class="col-md-12">
-                                            <div class="single-input">
-                                                <label for="cardNumber">Card Number</label>
-                                                <input type="text" id="cardNumber" placeholder="5890 - 6858 - 6332 - 9843">
-                                            </div>
+                                      <div class="col-md-12">
+                                        <div class="single-input">
+                                          <label for="cardNumber">Card Name</label>
+                                          {{form.name}}
                                         </div>
-                                        <div class="col-md-12">
-                                            <div class="single-input">
-                                                <label for="cardHolder">Card Holder</label>
-                                                <input type="text" id="cardHolder" placeholder="Alfred Davis">
-                                            </div>
+                                      </div>
+                                      <div class="col-md-12">
+                                        <div class="single-input">
+                                          <label for="cardNumber">Card Number</label>
+                                          {{form.number}}
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="single-input">
-                                                <label for="month">Month</label>
-                                                <input type="text" id="month" placeholder="12">
-                                            </div>
+                                      </div>
+                                      <div class="col-md-12">
+                                        <div class="single-input">
+                                          <label for="cardNumber">Expiry Month</label>
+                                          {{form.month}}
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="single-input">
-                                                <label for="year">Year</label>
-                                                <input type="text" id="year" placeholder="2025">
-                                            </div>
+                                      </div>
+                                      <div class="col-md-12">
+                                        <div class="single-input">
+                                          <label for="cardNumber">Expiry Year</label>
+                                          {{form.year}}
                                         </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="single-input">
+                                          <label for="cardNumber">CVV</label>
+                                          {{form.cvv}}
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="single-input">
+                                          <label for="cardNumber">Card Type</label>
+                                          {{form.card_type}}
+                                        </div>
+                                      </div>
+                                        
                                         <div class="col-12">
                                             <div class="btn-border w-100">
-                                                <button class="cmn-btn w-100">Add Card</button>
+                                                <button type="submit" class="cmn-btn w-100">Add Card</button>
                                             </div>
                                         </div>
                                     </div>

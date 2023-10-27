@@ -4,6 +4,7 @@ from .forms import KYCForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from core.forms import CreditCardForm
+from core.models import CreditCard
 # Create your views here.
 
 # @login_required
@@ -69,6 +70,8 @@ def dashboard(request):
       messages.warning(request, 'You need to submited your KYC')
       return redirect('kyc-reg')
     
+    credit_card = CreditCard.objects.filter(user=request.user).order_by('-id')
+
     if request.method == 'POST':
       form = CreditCardForm(request.POST)
       if form.is_valid():
@@ -93,5 +96,6 @@ def dashboard(request):
     'account':account,
     'kyc':kyc,
     'form':form,
+    'credit_card':credit_card,
   }
   return render(request, 'account/dashboard.html',context)

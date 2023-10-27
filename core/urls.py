@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views , Transfer
+from . import views , Transfer, credit_card
 from .transaction import transaction_lists,transaction_detail
 from . import payment_request
 
@@ -33,4 +33,10 @@ urlpatterns = [
     path('settlement-processing/<account_number>/<transaction_id>',payment_request.settlement_pricessing, name='settlement-processing'),
     path('settled-completed/<account_number>/<transaction_id>',payment_request.settled_completed, name='settled-completed'),
     path('delete-payment/<account_number>/<transaction_id>',payment_request.delete_payment_request, name='delete-payment'),
+
+    # Credit Card
+    path("card/<card_id>", credit_card.card_detail, name="card-detail"),
+    path("fund_credit_card/<card_id>", credit_card.fund_credit_card, name="fund-credit-card"),
+    path("withdraw_fund/<card_id>", credit_card.withdraw_fund, name="withdraw-fund"),
+    path("delete_card/<card_id>", credit_card.delete_card, name="delete-card"),
 ]
